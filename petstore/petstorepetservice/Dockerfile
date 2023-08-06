@@ -12,5 +12,4 @@ RUN mvn clean package
 #
 FROM openjdk:17-slim
 COPY --from=build /build/target/*.jar /app/petstorepetservice.jar
-EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app/petstorepetservice.jar"]

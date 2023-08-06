@@ -297,6 +297,7 @@ public class WebAppController {
 		pageViewTelemetry.setUrl(new URI(request.getRequestURL().toString()));
 		pageViewTelemetry.setName("landing");
 		this.sessionUser.getTelemetryClient().trackPageView(pageViewTelemetry);
+		model.addAttribute("LOCATION", System.getenv("LOCATION"));
 		return "home";
 	}
 
