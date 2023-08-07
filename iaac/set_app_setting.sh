@@ -3,6 +3,7 @@ export SERVICE_PLAN_NAME=fowlart_app_service_plan
 export ACR_NAME=fowlartcontainerregistry
 
 export PETSTORE_APP_NAME=fowlart-pet-store
+export PETSTORE_APP_SLOT_NAME=stage
 export ORDER_SERVICE_APP_NAME=fowlart-order-service
 export PET_SERVICE_APP_NAME=fowlart-pet-service
 export PRODUCT_SERVICE_APP_NAME=fowlart-product-service
@@ -19,6 +20,15 @@ az webapp config appsettings set --name $PETSTORE_APP_NAME --resource-group $RG_
 az webapp config appsettings set --name $PETSTORE_APP_NAME --resource-group $RG_NAME --settings PETSTOREPRODUCTSERVICE_URL=https://fowlart-product-service.azurewebsites.net
 az webapp config appsettings set --name $PETSTORE_APP_NAME --resource-group $RG_NAME --settings PETSTOREPETSERVICE_URL=https://fowlart-pet-service.azurewebsites.net
 az webapp config appsettings set --name $PETSTORE_APP_NAME --resource-group $RG_NAME --settings PETSTOREORDERSERVICE_URL=https://fowlart-order-service.azurewebsites.net
+
+# Retrieve application settings from the production slot
+app_settings=$(az webapp config appsettings list --name $PETSTORE_APP_NAME --resource-group $RG_NAME --query "[].{name:name,value:value}" --output json)
+
+# Apply the retrieved application settings to the target slot
+az webapp config appsettings set --name $PETSTORE_APP_NAME --resource-group $RG_NAME --slot $PETSTORE_APP_SLOT_NAME --settings $app_settings
+
+# set LOCATION to deployment slot of PETSTORE_APP
+az webapp config appsettings set --name $PETSTORE_APP_NAME --resource-group $RG_NAME --slot $PETSTORE_APP_SLOT_NAME --settings LOCATION=POLAND/STAGE
 
 az webapp config appsettings set --name $PETSTORE_APP_NAME_2 --resource-group $RG_NAME_2 --settings LOCATION=EUROPE
 az webapp config appsettings set --name $PETSTORE_APP_NAME_2 --resource-group $RG_NAME_2 --settings PETSTOREAPP_SERVER_PORT=80

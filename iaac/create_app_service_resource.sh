@@ -3,6 +3,7 @@ export SERVICE_PLAN_NAME=fowlart_app_service_plan
 export ACR_NAME=fowlartcontainerregistry
 
 export PETSTORE_APP_NAME=fowlart-pet-store
+export PETSTORE_APP_SLOT_NAME=stage
 export ORDER_SERVICE_APP_NAME=fowlart-order-service
 export PET_SERVICE_APP_NAME=fowlart-pet-service
 export PRODUCT_SERVICE_APP_NAME=fowlart-product-service
@@ -26,6 +27,8 @@ az webapp create --runtime "JAVA:17-java17" -g $RG_NAME --public-network-access 
 az webapp create --runtime "JAVA:17-java17" -g $RG_NAME --public-network-access Enabled -p $SERVICE_PLAN_NAME -n $PET_SERVICE_APP_NAME
 az webapp create --runtime "JAVA:17-java17" -g $RG_NAME --public-network-access Enabled -p $SERVICE_PLAN_NAME -n $PRODUCT_SERVICE_APP_NAME
 
+# create deployment slot for petstore app
+az webapp deployment slot create -g $RG_NAME -n $PETSTORE_APP_NAME -s $PETSTORE_APP_SLOT_NAME
 
 #second webb app in second resource group(front-end ONLY)
 az appservice plan create -n $SERVICE_PLAN_NAME_2  -g $RG_NAME_2 --sku S1 --output json --is-linux
