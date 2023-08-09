@@ -47,6 +47,9 @@ public class SignalRController {
 
 	@PostMapping(value = "/signalr/negotiate", produces = MediaType.APPLICATION_JSON_VALUE)
 	public SignalRConnectionInfo negotiate() {
+
+		logger.info("PetStoreApp user " + this.sessionUser.getName() + " requesting SignalR Negotiate");
+
 		if (this.signalRWebClient == null) {
 			return null;
 		}
@@ -60,6 +63,9 @@ public class SignalRController {
 	@PostMapping("/signalr/test")
 	public void sendCurrentUsers(@RequestParam(required = false) String userId,
 			@RequestParam(required = false) String mockSize) {
+
+		logger.info("PetStoreApp user " + this.sessionUser.getName() + " requesting SignalR Test");
+
 		if (this.signalRWebClient == null) {
 			return;
 		}

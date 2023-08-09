@@ -1,6 +1,7 @@
 package com.chtrembl.petstoreapp.controller;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,8 +25,12 @@ public class RestAPIController {
 	@Autowired
 	private User sessionUser;
 
+	private static Logger logger = Logger.getLogger(RestAPIController.class.getName());
+
 	@GetMapping("/api/contactus")
 	public String contactus() {
+
+		logger.info("PetStoreApp user " + this.sessionUser.getName() + " requesting Contact Us");
 
 		this.sessionUser.getTelemetryClient().trackEvent(
 				String.format("PetStoreApp user %s requesting Contact Us", this.sessionUser.getName()),
@@ -37,12 +42,17 @@ public class RestAPIController {
 	@GetMapping("/api/sessionid")
 	public String sessionid() {
 
+		logger.info("PetStoreApp user " + this.sessionUser.getName() + " requesting Session ID");
+
 		return this.sessionUser.getSessionId();
 	}
 
 	@GetMapping(value = "/introspectionSimulation", produces = MediaType.APPLICATION_JSON_VALUE)
 	public String introspectionSimulation(Model model, HttpServletRequest request,
-			@RequestParam(name = "sessionIdToIntrospect") Optional<String> sessionIdToIntrospect) {
+										  @RequestParam(name = "sessionIdToIntrospect") Optional<String> sessionIdToIntrospect) {
+
+		logger.info("PetStoreApp user " + this.sessionUser.getName() + " requesting Introspection Simulation");
+
 		boolean active = (sessionIdToIntrospect != null && sessionIdToIntrospect.isPresent()
 				&& sessionIdToIntrospect.get() != null
 				&& sessionIdToIntrospect.get().equals(request.getHeader("session-id")));
