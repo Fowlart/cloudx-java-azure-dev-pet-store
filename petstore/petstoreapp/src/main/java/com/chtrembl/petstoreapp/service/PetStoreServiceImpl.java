@@ -30,6 +30,7 @@ import reactor.core.publisher.Mono;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -119,6 +120,7 @@ public class PetStoreServiceImpl implements PetStoreService {
 
 	@Override
 	public Collection<Product> getProducts(String category, List<Tag> tags) {
+
 		List<Product> products = new ArrayList<>();
 
 		try {
@@ -148,6 +150,13 @@ public class PetStoreServiceImpl implements PetStoreService {
 				products = products.stream().filter(product -> category.equals(product.getCategory().getName())
 						&& product.getTags().toString().contains("small")).collect(Collectors.toList());
 			}
+
+			sessionUser.getTelemetryClient()
+					.trackEvent("PetStoreApp user " +this.sessionUser.getName() + " is requesting to retrieve products from the PetStoreProductService, session id " + this.sessionUser.getSessionId(),
+							this.sessionUser.getCustomEventProperties(), null);
+
+			sessionUser.getTelemetryClient().trackMetric("Number of products found",  products.size());
+
 			return products;
 		} catch (
 

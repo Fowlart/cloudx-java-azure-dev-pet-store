@@ -4,6 +4,7 @@ import com.chtrembl.petstore.order.model.ContainerEnvironment;
 import com.chtrembl.petstore.order.model.Order;
 import com.chtrembl.petstore.order.model.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microsoft.applicationinsights.attach.ApplicationInsights;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +58,7 @@ public class StoreApiController implements StoreApi {
 
 	@org.springframework.beans.factory.annotation.Autowired
 	public StoreApiController(ObjectMapper objectMapper, NativeWebRequest request) {
+		ApplicationInsights.attach();
 		this.objectMapper = objectMapper;
 		this.request = request;
 	}

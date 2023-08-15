@@ -29,3 +29,5 @@ management:
   endpoint:
     httptrace:
       enabled: true
+azure.application-insights:
+  instrumentation-key: 3e0ce15e-9eb8-44b6-b6bc-f09b3d975f36

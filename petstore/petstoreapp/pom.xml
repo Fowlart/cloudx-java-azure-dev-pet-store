@@ -54,10 +54,16 @@
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity5</artifactId>
         </dependency>
+        <!--azure Application Insights connection -->
         <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>applicationinsights-spring-boot-starter</artifactId>
             <version>${applicationinsights.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>applicationinsights-runtime-attach</artifactId>
+            <version>3.4.15</version>
         </dependency>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
@@ -132,6 +138,18 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <!--file share -->
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-storage-file-share</artifactId>
+            <version>12.19.0</version> <!-- Check for the latest version -->
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.azure/azure-storage-common -->
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-storage-common</artifactId>
+            <version>12.22.0</version>
         </dependency>
     </dependencies>
 
