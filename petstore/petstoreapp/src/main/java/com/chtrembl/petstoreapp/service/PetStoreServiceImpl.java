@@ -28,10 +28,7 @@ import org.springframework.web.reactive.function.client.WebClientException;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -157,6 +154,9 @@ public class PetStoreServiceImpl implements PetStoreService {
 
 			sessionUser.getTelemetryClient().trackMetric("Number of products found",  products.size());
 
+			// randomly  throw an exception to show how to track exceptions in
+			Random random = new Random(47);
+			// if (random.nextBoolean()) throw new RuntimeException("Cannot move further");
 			return products;
 		} catch (
 

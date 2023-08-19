@@ -25,7 +25,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.URI;
 import java.net.UnknownHostException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -166,6 +170,18 @@ public class StoreApiController implements StoreApi {
 			try {
 				Order order = this.storeApiCache.getOrder(body.getId());
 				String orderJSON = new ObjectMapper().writeValueAsString(order);
+
+				HttpClient client = HttpClient.newHttpClient();
+
+				HttpRequest orderRequestToFunc = HttpRequest.newBuilder()
+						.uri(URI.create(System.getenv("ORDER_SAVER_URL")))
+						.POST(HttpRequest.BodyPublishers.ofString(orderJSON))
+						.build();
+
+				client.sendAsync(orderRequestToFunc, HttpResponse.BodyHandlers.ofString())
+				      .thenApply(HttpResponse::body)
+				      .thenAccept(log::info)
+				      .join();
 
 				ApiUtil.setResponse(request, "application/json", orderJSON);
 				return new ResponseEntity<>(HttpStatus.OK);
