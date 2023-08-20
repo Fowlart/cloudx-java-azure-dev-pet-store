@@ -21,6 +21,6 @@ url=$(az functionapp show --name fowlartordersaver --resource-group fowlartorder
 az webapp config appsettings set --name fowlartordersaver --resource-group fowlartordersaver-rg --settings BLOB_CONNECTION_STRING=$connectionString
 
 # set url of deployed function as app setting in order service
-az webapp config appsettings set --name $ORDER_SERVICE_APP_NAME --resource-group $RG_NAME --settings ORDER_SAVER_URL="$url/api/save_order"
+az webapp config appsettings set --name $ORDER_SERVICE_APP_NAME --resource-group $RG_NAME --settings ORDER_SAVER_URL="https://$url/api/save_order"
 
 
