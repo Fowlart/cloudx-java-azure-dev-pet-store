@@ -2,21 +2,54 @@ package com.chtrembl.petstore.product.model;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 /**
  * Tag
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2021-12-20T15:31:39.272-05:00")
-
+@Entity(name = "tag")
 public class Tag {
+
+	//generateId is used to generate a unique id for each tag
+	@Id
+	private String generateId;
+
+
+	public String getGenerateId() {
+		return generateId;
+	}
+
+	public void setGenerateId(String generateId) {
+		this.generateId = generateId;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
 	@JsonProperty("id")
 	private Long id = null;
+
+	@ManyToOne(targetEntity = Product.class)
+	@JoinColumn(name = "product_id")
+	@JsonBackReference
+	private Product product;
 
 	@JsonProperty("name")
 	private String name = null;

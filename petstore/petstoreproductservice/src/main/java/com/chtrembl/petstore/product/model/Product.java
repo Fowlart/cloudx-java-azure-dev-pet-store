@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.ColumnTransformer;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -15,17 +18,17 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 import io.swagger.annotations.ApiModelProperty;
 
-/**
- * Pet
- */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2021-12-20T15:31:39.272-05:00")
-
+@Entity(name = "product")
 public class Product {
 	@JsonProperty("id")
+	@Id
+	@Column(name = "product_id")
 	private Long id;
 
 	@JsonProperty("category")
+	@OneToOne(targetEntity = Category.class)
 	private Category category;
 
 	@JsonProperty("name")
@@ -37,6 +40,9 @@ public class Product {
 
 	@JsonProperty("tags")
 	@Valid
+	//@Column(name = "tags", columnDefinition = "array")
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@JsonManagedReference
 	private List<Tag> tags = null;
 
 	/**
@@ -77,6 +83,7 @@ public class Product {
 	}
 
 	@JsonProperty("status")
+	@Enumerated(EnumType.STRING)
 	private StatusEnum status;
 
 	public Product id(Long id) {

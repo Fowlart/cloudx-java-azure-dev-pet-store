@@ -4,10 +4,15 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import com.chtrembl.petstore.pet.data.CategoryRepository;
+import com.chtrembl.petstore.pet.data.PetRepository;
+import com.chtrembl.petstore.pet.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -25,10 +30,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.chtrembl.petstore.pet.model.ContainerEnvironment;
-import com.chtrembl.petstore.pet.model.DataPreload;
-import com.chtrembl.petstore.pet.model.ModelApiResponse;
-import com.chtrembl.petstore.pet.model.Pet;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -51,9 +52,32 @@ public class PetApiController implements PetApi {
 	@Autowired
 	private DataPreload dataPreload;
 
+	@Autowired
+	private PetRepository petRepository;
+
+	@Autowired
+	private CategoryRepository categoryRepository;
+
+
 	@Override
 	public DataPreload getBeanToBeAutowired() {
 		return dataPreload;
+	}
+
+	@PostConstruct
+	public void fillDatabase() {
+
+		List<Category> categories = this.getPreloadedPets().stream().map(pet -> pet.getCategory()).distinct().collect(Collectors.toList());
+
+		for (Category category : categories) {
+			this.categoryRepository.save(category);
+		}
+
+		List<Pet> pets = this.getPreloadedPets();
+
+		for (Pet pet : pets) {
+			this.petRepository.save(pet);
+		}
 	}
 
 	@org.springframework.beans.factory.annotation.Autowired
@@ -100,7 +124,8 @@ public class PetApiController implements PetApi {
 					"PetStorePetService incoming GET request to petstorepetservice/v2/pet/findPetsByStatus?status=%s",
 					status));
 			try {
-				String petsJSON = new ObjectMapper().writeValueAsString(this.getPreloadedPets());
+				// used DB instead of preloaded data
+				String petsJSON = new ObjectMapper().writeValueAsString(this.petRepository.findAll());
 				ApiUtil.setResponse(request, "application/json", petsJSON);
 				return new ResponseEntity<>(HttpStatus.OK);
 			} catch (JsonProcessingException e) {

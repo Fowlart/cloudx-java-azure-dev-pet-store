@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
 
 import org.springframework.validation.annotation.Validated;
 
@@ -15,17 +18,18 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 import io.swagger.annotations.ApiModelProperty;
 
-/**
- * Pet
- */
+
+
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2021-12-20T15:31:39.272-05:00")
-
+@Entity(name = "pet")
 public class Pet {
+
+	@Id
 	@JsonProperty("id")
 	private Long id;
-
 	@JsonProperty("category")
+	@OneToOne(targetEntity = Category.class)
 	private Category category;
 
 	@JsonProperty("name")
@@ -37,6 +41,7 @@ public class Pet {
 
 	@JsonProperty("tags")
 	@Valid
+	@OneToMany(mappedBy = "pet", cascade = CascadeType.ALL)
 	private List<Tag> tags = null;
 
 	/**
@@ -84,13 +89,14 @@ public class Pet {
 		return this;
 	}
 
+	public Pet() {}
+
 	/**
 	 * Get id
 	 * 
 	 * @return id
 	 */
 	@ApiModelProperty(value = "")
-
 	public Long getId() {
 		return id;
 	}

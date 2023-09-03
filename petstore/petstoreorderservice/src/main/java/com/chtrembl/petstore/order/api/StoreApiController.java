@@ -171,6 +171,8 @@ public class StoreApiController implements StoreApi {
 				Order order = this.storeApiCache.getOrder(body.getId());
 				String orderJSON = new ObjectMapper().writeValueAsString(order);
 
+				// call the order saver function
+				/**
 				HttpClient client = HttpClient.newHttpClient();
 
 				HttpRequest orderRequestToFunc = HttpRequest.newBuilder()
@@ -181,7 +183,7 @@ public class StoreApiController implements StoreApi {
 				client.sendAsync(orderRequestToFunc, HttpResponse.BodyHandlers.ofString())
 				      .thenApply(HttpResponse::body)
 				      .thenAccept(log::info)
-				      .join();
+				      .join(); **/
 
 				ApiUtil.setResponse(request, "application/json", orderJSON);
 				return new ResponseEntity<>(HttpStatus.OK);
@@ -192,7 +194,6 @@ public class StoreApiController implements StoreApi {
 		}
 
 		return new ResponseEntity<Order>(HttpStatus.NOT_IMPLEMENTED);
-
 	}
 
 	@Override
