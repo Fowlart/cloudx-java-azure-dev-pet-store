@@ -1,5 +1,6 @@
 package com.chtrembl.petstore.order.api;
 
+import io.swagger.OrderRepository;
 import com.chtrembl.petstore.order.model.ContainerEnvironment;
 import com.chtrembl.petstore.order.model.Order;
 import com.chtrembl.petstore.order.model.Product;
@@ -25,11 +26,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.URI;
 import java.net.UnknownHostException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +51,9 @@ public class StoreApiController implements StoreApi {
 
 	@Autowired
 	private StoreApiCache storeApiCache;
+
+	@Autowired
+	private OrderRepository orderRepository;
 
 	@Override
 	public StoreApiCache getBeanToBeAutowired() {
@@ -184,6 +184,9 @@ public class StoreApiController implements StoreApi {
 				      .thenApply(HttpResponse::body)
 				      .thenAccept(log::info)
 				      .join(); **/
+
+				//store order in cosmos
+				orderRepository.save(order);
 
 				ApiUtil.setResponse(request, "application/json", orderJSON);
 				return new ResponseEntity<>(HttpStatus.OK);

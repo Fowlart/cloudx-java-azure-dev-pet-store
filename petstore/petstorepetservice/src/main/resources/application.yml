@@ -15,7 +15,7 @@ spring:
   datasource:
     url: jdbc:postgresql://fowlartpostgres.postgres.database.azure.com:5432/postgres?sslmode=require
     username: fowlart
-    password: kW2nfsDLuBxw3TW
+    password: ${POSTGRESQL_PASSWORD}
 
   jpa:
     hibernate:
