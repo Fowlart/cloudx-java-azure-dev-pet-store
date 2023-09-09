@@ -1,5 +1,8 @@
 package com.chtrembl.petstoreapp;
 
+import com.azure.identity.DefaultAzureCredentialBuilder;
+import com.azure.security.keyvault.secrets.SecretClient;
+import com.azure.security.keyvault.secrets.SecretClientBuilder;
 import com.microsoft.applicationinsights.attach.ApplicationInsights;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

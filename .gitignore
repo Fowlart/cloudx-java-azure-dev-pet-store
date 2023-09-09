@@ -23,3 +23,5 @@
 hs_err_pid*
 
 .idea
+/do_not_commit.sh
+/key-vault/iaac/key_vault_secrets_upload.sh

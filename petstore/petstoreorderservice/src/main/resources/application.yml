@@ -20,9 +20,14 @@ spring:
   cloud:
     azure:
       cosmos:
-        endpoint: https://fowlartcosmos.documents.azure.com:443/
-        key: ${COSMOSDB_KEY}
+        endpoint: https://fowlart-cosmosdb.documents.azure.com:443/
+        # get value from Key Vault
+        key: ${CosmosDBKey}
         database: petstore
+      keyvault:
+        secret:
+          property-sources[0]:
+            endpoint: https://${KEY_VAULT_NAME}.vault.azure.net/
 
 management:
   endpoints:
