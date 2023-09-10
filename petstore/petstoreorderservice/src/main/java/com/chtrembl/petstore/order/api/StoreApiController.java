@@ -5,7 +5,6 @@ import com.chtrembl.petstore.order.model.ContainerEnvironment;
 import com.chtrembl.petstore.order.model.Order;
 import com.chtrembl.petstore.order.model.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.microsoft.applicationinsights.attach.ApplicationInsights;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,8 +45,8 @@ public class StoreApiController implements StoreApi {
 	@Qualifier(value = "cacheManager")
 	private CacheManager cacheManager;
 
-	@Autowired
-	private ContainerEnvironment containerEnvironment;
+	//@Autowired
+	//private ContainerEnvironment containerEnvironment;
 
 	@Autowired
 	private StoreApiCache storeApiCache;
@@ -62,20 +61,14 @@ public class StoreApiController implements StoreApi {
 
 	@org.springframework.beans.factory.annotation.Autowired
 	public StoreApiController(ObjectMapper objectMapper, NativeWebRequest request) {
-		ApplicationInsights.attach();
 		this.objectMapper = objectMapper;
 		this.request = request;
 	}
 
 	// should really be in an interceptor
 	public void conigureThreadForLogging() {
-		try {
-			this.containerEnvironment.setContainerHostName(
-					InetAddress.getLocalHost().getHostAddress() + "/" + InetAddress.getLocalHost().getHostName());
-		} catch (UnknownHostException e) {
-			log.info("PetStoreOrderService getRequest() error: " + e.getMessage());
-		}
-		MDC.put("containerHostName", this.containerEnvironment.getContainerHostName());
+
+		//MDC.put("containerHostName", this.containerEnvironment.getContainerHostName());
 		MDC.put("session_Id", request.getHeader("session-id"));
 	}
 
@@ -99,9 +92,9 @@ public class StoreApiController implements StoreApi {
 		// giving consumers JSON regardless here, info wasn't part of the swagger
 		// contract :)
 		ApiUtil.setResponse(request, "application/json",
-				"{ \"service\" : \"order service\", \"version\" : \"" + containerEnvironment.getAppVersion()
-						+ "\", \"container\" : \"" + containerEnvironment.getContainerHostName()
-						+ "\", \"ordersCacheSize\" : \"" + ordersCacheSize + "\", \"author\" : \"" + containerEnvironment.getAuthor()
+				"{ \"service\" : \"order service\", \"version\" : \"" + "1.0.0" + "\", \"author\" : \"" + "Chris Tremblay"
+						+ "\", \"container\" : \"" +"containerEnvironment.getContainerHostName()"
+						+ "\", \"ordersCacheSize\" : \"" + ordersCacheSize + "\", \"author\" : \"" +" containerEnvironment.getAuthor()"
 						+ "\" }");
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

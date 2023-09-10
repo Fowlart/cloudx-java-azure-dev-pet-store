@@ -13,22 +13,25 @@ petstore:
 
 spring:
   application:
-    name: petstoreorderservice
+    name: fowlart-order-service
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
   cloud:
     azure:
-      cosmos:
-        endpoint: https://fowlart-cosmosdb.documents.azure.com:443/
-        # get value from Key Vault
-        key: ${CosmosDBKey}
-        database: petstore
       keyvault:
+        endpoint: https://fowlart-key-vault.vault.azure.net/
+        credential:
+          managed-identity-enabled: true
         secret:
           property-source-enabled: true
           property-sources:
             - endpoint: https://fowlart-key-vault.vault.azure.net/
+              secret-keys: CosmosDBKey, PetstoreproductserviceUrl, PetstoreorderserviceServerPort
+      cosmos:
+        endpoint: https://fowlartcosmos.documents.azure.com:443/
+        key: ${CosmosDBKey}
+        database: petstore
 
 management:
   endpoints:
@@ -41,5 +44,3 @@ management:
   endpoint:
     httptrace:
       enabled: true
-azure.application-insights:
-  instrumentation-key: 3e0ce15e-9eb8-44b6-b6bc-f09b3d975f36

@@ -1,14 +1,15 @@
 package io.swagger;
 
+
+import com.azure.identity.DefaultAzureCredentialBuilder;
+import com.azure.security.keyvault.secrets.SecretClient;
+import com.azure.security.keyvault.secrets.SecretClientBuilder;
 import com.chtrembl.petstore.order.model.ContainerEnvironment;
-import com.microsoft.applicationinsights.attach.ApplicationInsights;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cache.annotation.EnableCaching;
@@ -23,7 +24,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @ComponentScan(basePackages = { "io.swagger", "com.chtrembl.petstore.order.api", "io.swagger.configuration", "com.chtrembl.petstore.order.data"})
 @EntityScan(basePackages = "com.chtrembl.petstore.order.model")
 public class Swagger2SpringBoot implements CommandLineRunner {
-	static final Logger log = LoggerFactory.getLogger(Swagger2SpringBoot.class);
 
 	@Bean
 	public RestTemplate restTemplate(RestTemplateBuilder builder) {
@@ -31,9 +31,23 @@ public class Swagger2SpringBoot implements CommandLineRunner {
 	}
 
 	@Bean
+	public SecretClient secretClient() {
+		String keyVaultUri = "https://fowlart-key-vault.vault.azure.net/";
+
+		SecretClient secretClient = new SecretClientBuilder()
+				.vaultUrl(keyVaultUri)
+				.credential(new DefaultAzureCredentialBuilder().build())
+				.buildClient();
+
+		return secretClient;
+	}
+
+	/**
+	@Bean
 	public ContainerEnvironment containerEnvvironment() {
 		return new ContainerEnvironment();
 	}
+	**/
 
 	@Override
 	public void run(String... arg0) throws Exception {
@@ -43,7 +57,6 @@ public class Swagger2SpringBoot implements CommandLineRunner {
 	}
 
 	public static void main(String[] args) throws Exception {
-		ApplicationInsights.attach();
 		new SpringApplication(Swagger2SpringBoot.class).run(args);
 	}
 

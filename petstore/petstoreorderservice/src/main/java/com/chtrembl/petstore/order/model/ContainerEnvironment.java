@@ -16,13 +16,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.microsoft.applicationinsights.core.dependencies.google.common.io.CharStreams;
 
 import ch.qos.logback.core.joran.spi.JoranException;
 
 @SuppressWarnings("serial")
 public class ContainerEnvironment implements Serializable {
-	private static Logger logger = LoggerFactory.getLogger(ContainerEnvironment.class);
+	// private static Logger logger = LoggerFactory.getLogger(ContainerEnvironment.class);
 	private String containerHostName = null;
 	private String appVersion = null;
 	private String appDate = null;
@@ -41,17 +40,12 @@ public class ContainerEnvironment implements Serializable {
 
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
-			InputStream resourcee = new ClassPathResource("version.json").getInputStream();
 			String text = null;
-			try (final Reader reader = new InputStreamReader(resourcee)) {
-				text = CharStreams.toString(reader);
-			}
-
 			Version version = objectMapper.readValue(text, Version.class);
 			this.setAppVersion(version.getVersion());
 			this.setAppDate(version.getDate());
 		} catch (IOException e) {
-			logger.info("error parsing file " + e.getMessage());
+			//logger.info("error parsing file " + e.getMessage());
 			this.setAppVersion("unknown");
 			this.setAppDate("unknown");
 		}

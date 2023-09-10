@@ -58,7 +58,7 @@ az keyvault set-policy \
     --object-id $petstorePrincipalId
 
 az keyvault set-policy \
-    --secret-permissions all\
+    --secret-permissions get list\
     --resource-group $RG_NAME \
     --name $KEY_VAULT_NAME \
     --object-id $orderServicePrincipalId
