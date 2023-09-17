@@ -119,30 +119,11 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- secrets bookkeeping -->
-        <dependency>
-            <groupId>com.azure.spring</groupId>
-            <artifactId>spring-cloud-azure-dependencies</artifactId>
-            <version>5.5.0</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.azure.spring</groupId>
-            <artifactId>spring-cloud-azure-starter-keyvault-secrets</artifactId>
-            <version>5.5.0</version>
-        </dependency>
-
+        <!-- azure service bus -->
         <dependency>
             <groupId>com.azure</groupId>
-            <artifactId>azure-security-keyvault-secrets</artifactId>
-            <version>4.5.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-identity</artifactId>
-            <version>1.9.1</version>
+            <artifactId>azure-messaging-servicebus</artifactId>
+            <version>7.13.3</version>
         </dependency>
 
         <dependency>

@@ -39,6 +39,7 @@ public class Swagger2SpringBoot implements CommandLineRunner {
 	}
 
 	public static void main(String[] args) throws Exception {
+		System.out.println("Postgres password: " + System.getenv("POSTGRESQL_PASSWORD"));
 		new SpringApplication(Swagger2SpringBoot.class).run(args);
 	}
 

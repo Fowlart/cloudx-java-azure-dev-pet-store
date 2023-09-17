@@ -2,8 +2,6 @@ package io.swagger;
 
 
 import com.azure.identity.DefaultAzureCredentialBuilder;
-import com.azure.security.keyvault.secrets.SecretClient;
-import com.azure.security.keyvault.secrets.SecretClientBuilder;
 import com.chtrembl.petstore.order.model.ContainerEnvironment;
 
 import org.springframework.boot.CommandLineRunner;
@@ -21,7 +19,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 @EnableCaching
 @EnableSwagger2
-@ComponentScan(basePackages = { "io.swagger", "com.chtrembl.petstore.order.api", "io.swagger.configuration", "com.chtrembl.petstore.order.data"})
+@ComponentScan(basePackages = { "io.swagger", "com.chtrembl.petstore.order.api", "io.swagger.configuration", "com.chtrembl.petstore.order.service_bus"
+})
 @EntityScan(basePackages = "com.chtrembl.petstore.order.model")
 public class Swagger2SpringBoot implements CommandLineRunner {
 
@@ -30,17 +29,7 @@ public class Swagger2SpringBoot implements CommandLineRunner {
 		return builder.build();
 	}
 
-	@Bean
-	public SecretClient secretClient() {
-		String keyVaultUri = "https://fowlart-key-vault.vault.azure.net/";
 
-		SecretClient secretClient = new SecretClientBuilder()
-				.vaultUrl(keyVaultUri)
-				.credential(new DefaultAzureCredentialBuilder().build())
-				.buildClient();
-
-		return secretClient;
-	}
 
 	/**
 	@Bean

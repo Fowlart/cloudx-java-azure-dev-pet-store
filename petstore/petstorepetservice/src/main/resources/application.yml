@@ -12,6 +12,10 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  datasource:
+    url: jdbc:postgresql://fowlartpostgres.postgres.database.azure.com:5432/postgres?sslmode=require
+    username: fowlart
+    password: ${POSTGRESQL_PASSWORD}
 
   jpa:
     hibernate:

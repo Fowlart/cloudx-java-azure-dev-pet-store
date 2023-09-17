@@ -3,9 +3,10 @@
     <option name="ALTERNATIVE_JRE_PATH" value="corretto-17" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <envs>
-      <env name="ORDER_SAVER_URL" value="http://localhost:54078/api/save_order" />
+      <env name="COSMOSDB_KEY" value="RCQEn3UDjWwq2amrSKBgO9PNrY4YS3oXn26579Q5FtcuWMqi6mFq7MXf1masz8Oi1tO512M1Uhm2ACDbbzjTkw==" />
       <env name="PETSTOREORDERSERVICE_SERVER_PORT" value="8083" />
       <env name="PETSTOREPRODUCTSERVICE_URL" value="http://localhost:8082" />
+      <env name="SERVICEBUS_CONNECTION_STRING" value="Endpoint=sb://fowlartpetstorenamespace.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=DChMygB69YpLoNvcZwoqVA1XNTl7jABff+ASbOTbIP0=" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="io.swagger.Swagger2SpringBoot" />
     <module name="petstoreorderservice" />

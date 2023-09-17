@@ -1,5 +1,6 @@
 package com.chtrembl.petstore.order.api;
 
+import com.chtrembl.petstore.order.service_bus.OrderReserver;
 import io.swagger.OrderRepository;
 import com.chtrembl.petstore.order.model.ContainerEnvironment;
 import com.chtrembl.petstore.order.model.Order;
@@ -53,6 +54,9 @@ public class StoreApiController implements StoreApi {
 
 	@Autowired
 	private OrderRepository orderRepository;
+
+	@Autowired
+	private OrderReserver orderReserver;
 
 	@Override
 	public StoreApiCache getBeanToBeAutowired() {
@@ -180,6 +184,9 @@ public class StoreApiController implements StoreApi {
 
 				//store order in cosmos
 				orderRepository.save(order);
+
+				// send message to service bus
+				this.orderReserver.sendMessage(orderJSON);
 
 				ApiUtil.setResponse(request, "application/json", orderJSON);
 				return new ResponseEntity<>(HttpStatus.OK);

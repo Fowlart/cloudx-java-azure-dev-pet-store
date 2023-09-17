@@ -4,6 +4,7 @@
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <envs>
       <env name="PETSTOREPETSERVICE_SERVER_PORT" value="8081" />
+      <env name="POSTGRESQL_PASSWORD" value="kW2nfsDLuBxw3TW" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="io.swagger.Swagger2SpringBoot" />
     <module name="petstorepetservice" />

@@ -4,35 +4,29 @@ springfoxdocumentation:
       path: /api-docs
       
 server:
-  port: ${PetstoreorderserviceServerPort}
+  port: ${PETSTOREORDERSERVICE_SERVER_PORT:8080}
 
 petstore:
   service:
     product:
-      url: ${PetstoreproductserviceUrl}
+      url: ${PETSTOREPRODUCTSERVICE_URL:http://localhost:8082}
 
 spring:
   application:
-    name: fowlart-order-service
+    name: petstoreorderservice
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
   cloud:
     azure:
-      keyvault:
-        endpoint: https://fowlart-key-vault.vault.azure.net/
-        credential:
-          managed-identity-enabled: true
-        secret:
-          property-source-enabled: true
-          property-sources:
-            - endpoint: https://fowlart-key-vault.vault.azure.net/
-              secret-keys: CosmosDBKey, PetstoreproductserviceUrl, PetstoreorderserviceServerPort
       cosmos:
         endpoint: https://fowlartcosmos.documents.azure.com:443/
-        key: ${CosmosDBKey}
+        key: ${COSMOSDB_KEY}
         database: petstore
-
+servicebus:
+  connection-string: ${SERVICEBUS_CONNECTION_STRING}
+  queue:
+    name: pet_store_order_queue
 management:
   endpoints:
     web:
