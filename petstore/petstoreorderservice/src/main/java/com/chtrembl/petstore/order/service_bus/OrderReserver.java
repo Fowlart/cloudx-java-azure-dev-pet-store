@@ -3,6 +3,7 @@ package com.chtrembl.petstore.order.service_bus;
 import com.azure.messaging.servicebus.ServiceBusClientBuilder;
 import com.azure.messaging.servicebus.ServiceBusMessage;
 import com.azure.messaging.servicebus.ServiceBusSenderClient;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +11,8 @@ import javax.annotation.PreDestroy;
 
 @Component
 public class OrderReserver {
+
+    private final Logger logger = Logger.getLogger(OrderReserver.class.getName());
 
     private final ServiceBusSenderClient senderClient;
 
@@ -24,6 +27,8 @@ public class OrderReserver {
     }
 
     public  void sendMessage(String msg) {
+
+        logger.info("Sending message to service bus: "+msg);
 
         var message = new ServiceBusMessage(msg);
 
