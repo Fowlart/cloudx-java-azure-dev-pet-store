@@ -17,8 +17,8 @@ import com.chtrembl.petstoreapp.model.ContainerEnvironment;
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private static Logger logger = LoggerFactory.getLogger(WebSecurityConfiguration.class);
 
-	@Autowired(required = false)
-	private AADB2COidcLoginConfigurerWrapper aadB2COidcLoginConfigurerWrapper = null;
+	@Autowired
+	private AADB2COidcLoginConfigurerWrapper aadB2COidcLoginConfigurerWrapper;
 
 	@Autowired
 	private ContainerEnvironment containeEnvironment;

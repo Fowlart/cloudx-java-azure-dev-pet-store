@@ -25,3 +25,6 @@ hs_err_pid*
 .idea
 /do_not_commit.sh
 /key-vault/iaac/key_vault_secrets_upload.sh
+/b2c-tenant/iaac/do_not_commit.txt
+/b2c-tenant/iaac/curl.sh
+/petstore/petstoreapp/.run/

@@ -1,15 +1,21 @@
 package com.chtrembl.petstoreapp.controller;
 
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.azure.core.annotation.QueryParam;
+import com.chtrembl.petstoreapp.security.AADB2COidcLoginConfigurerWrapper;
+import com.chtrembl.petstoreapp.security.JWTDecoder;
+import com.chtrembl.petstoreapp.security.TokenExchange;
+import com.microsoft.aad.msal4j.AuthorizationCodeParameters;
+import com.microsoft.aad.msal4j.ClientCredentialFactory;
+import com.microsoft.aad.msal4j.ConfidentialClientApplication;
+import com.microsoft.aad.msal4j.IAuthenticationResult;
+import com.nimbusds.jwt.JWTParser;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +25,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.caffeine.CaffeineCache;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,6 +66,15 @@ public class WebAppController {
 
 	@Autowired
 	private CacheManager currentUsersCacheManager;
+
+	@Autowired
+	private AADB2COidcLoginConfigurerWrapper aadB2COidcLoginConfigurerWrapper;
+
+	@Autowired
+	private TokenExchange tokenExchange;
+
+	@Autowired
+	private JWTDecoder jwtDecoder;
 
 	@ModelAttribute
 	public void setModel(HttpServletRequest request, Model model, OAuth2AuthenticationToken token) {
@@ -122,8 +138,26 @@ public class WebAppController {
 	}
 
 	@GetMapping(value = "/login")
-	public String login(Model model, HttpServletRequest request) throws URISyntaxException {
-		logger.info("PetStoreApp /login requested, routing to login view...");
+	public String login(Model model,
+						HttpServletRequest request,
+						String name,
+						@QueryParam(value = "code") String code) throws URISyntaxException {
+
+		logger.info("Attempt to login...");
+		logger.info("Code: " + code);
+		logger.info(name);
+
+		if (code != null) {
+			String clientId = System.getenv("PETSTOREAPP_B2C_CREDENTIAL_CLIENT_ID");
+			String token = this.tokenExchange.getGwtToken(
+					code,
+					clientId,
+					System.getenv("PETSTOREAPP_B2C_CREDENTIAL_CLIENT_SECRET"),
+					System.getenv("PETSTOREAPP_B2C_CREDENTIAL_REDIRECT_URI"));
+			if (token != null) {
+				model.addAttribute("userName", this.jwtDecoder.getNameFromToken(token));
+			}
+		}
 
 		PageViewTelemetry pageViewTelemetry = new PageViewTelemetry();
 		pageViewTelemetry.setUrl(new URI(request.getRequestURL().toString()));
@@ -289,15 +323,24 @@ public class WebAppController {
 	}
 
 	@GetMapping(value = "/*")
-	public String landing(Model model, OAuth2AuthenticationToken token, HttpServletRequest request)
-			throws URISyntaxException {
+	public String landing(Model model, OAuth2AuthenticationToken token, HttpServletRequest request) throws URISyntaxException {
+
+		if (token != null) {
+			final OAuth2User user = token.getPrincipal();
+			model.addAttribute("grant_type", user.getAuthorities());
+			model.addAllAttributes(user.getAttributes());
+			// log all claims
+			user.getAttributes().forEach((k, v) -> logger.info(String.format("name %s has value %s", k, v)));
+		}
+
 		logger.info(String.format("PetStoreApp %s requested and %s is being routed to home view session %s",
 				request.getRequestURI(), this.sessionUser.getName(), this.sessionUser.getSessionId()));
+
 		PageViewTelemetry pageViewTelemetry = new PageViewTelemetry();
 		pageViewTelemetry.setUrl(new URI(request.getRequestURL().toString()));
 		pageViewTelemetry.setName("landing");
 		this.sessionUser.getTelemetryClient().trackPageView(pageViewTelemetry);
-		model.addAttribute("LOCATION", System.getenv("LOCATION"));
+			model.addAttribute("LOCATION", System.getenv("LOCATION"));
 		return "home";
 	}
 

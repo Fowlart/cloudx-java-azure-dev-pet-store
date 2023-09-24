@@ -10,7 +10,7 @@
         </layout>
     </appender>
    
-    <root level="INFO">
+    <root level="WARNING">
     	<appender-ref ref="consoleAppender" />
     </root>
 </configuration>

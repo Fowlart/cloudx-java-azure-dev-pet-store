@@ -37,9 +37,9 @@ public class LoggingFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 
-		MDC.put("appVersion", this.containerEnvironment.getAppVersion());
-		MDC.put("appDate", this.containerEnvironment.getAppDate());
-		MDC.put("containerHostName", this.containerEnvironment.getContainerHostName());
+		//MDC.put("appVersion", this.containerEnvironment.getAppVersion());
+		//MDC.put("appDate", this.containerEnvironment.getAppDate());
+		//MDC.put("containerHostName", this.containerEnvironment.getContainerHostName());
 
 		if (containerEnvironment.getAdditionalHeadersToLog().size() > 0) {
 			Enumeration<String> headerNames = ((HttpServletRequest) request).getHeaderNames();
@@ -48,7 +48,7 @@ public class LoggingFilter implements Filter {
 					while (headerNames.hasMoreElements()) {
 						String key = headerNames.nextElement();
 						String value = ((HttpServletRequest) request).getHeader(key);
-						System.out.println("Header: " + key + "=" + value);
+						//System.out.println("Header: " + key + "=" + value);
 					}
 
 				} catch (Exception e) {
@@ -77,7 +77,7 @@ public class LoggingFilter implements Filter {
 			additionalHeadersToLog = sb.toString();
 		}
 
-		MDC.put("additionalHeadersToLog", additionalHeadersToLog);
+		//MDC.put("additionalHeadersToLog", additionalHeadersToLog);
 		chain.doFilter(request, response);
 	}
 

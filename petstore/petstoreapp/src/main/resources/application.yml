@@ -39,3 +39,19 @@ spring:
     cache: false
   cache:
     cache-names: currentUsers
+  cloud:
+    azure:
+      activedirectory:
+        b2c:
+          enabled: true
+          baseUri: https://fowlart.b2clogin.com/fowlart.onmicrosoft.com
+          credential:
+            client-id: ${PETSTOREAPP_B2C_CREDENTIAL_CLIENT_ID}
+            client-secret: ${PETSTOREAPP_B2C_CREDENTIAL_CLIENT_SECRET}
+          login-flow: sign-up-or-sign-in
+          reply-url: https://fowlart-pet-store.azurewebsites.net/login
+          user-flows:
+            sign-up-or-sign-in: B2C_1_pet-store-user-flow
+            #profile-edit: B2C_1_profileediting
+            #password-reset: B2C_1_passwordreset
+          logout-success-url: https://fowlart-pet-store.azurewebsites.net/
